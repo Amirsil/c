@@ -8,62 +8,102 @@ typedef struct sNode{
 		struct sNode *next;
 	}sNode;
 
-sNode *CreateNode(sNode *ptr, char *str)
+void CreateNode(sNode **ptr, char *str)
 {
-	sNode *newptr = (sNode *)malloc(sizeof(*ptr));
-	*newptr = (sNode){str, ptr};
-    printf("Allocated 0x%x (\"%s\")\n", newptr, newptr -> str);
-	return newptr;
-}
-
-sNode *RemoveNode(sNode *ptr, char *str)
-{
-	sNode *nextptr = ptr -> next;
-	if (!strcmp(nextptr -> str, str))
+	sNode *newptr = (sNode *)malloc(sizeof(sNode *));
+	if (*ptr)
 	{
-		ptr -> next = ptr -> next -> next;
-		printf("Freeing 0x%x (\"%s\")\n", nextptr, nextptr -> str);
-		free(nextptr);
+		*newptr = (sNode){str, *ptr};
+		printf("Added \"%s\" (0x%x)\n", newptr -> str, newptr);
+		*ptr = newptr;
 	}
-	else 
-		RemoveNode(ptr -> next, str);
-}
-
-void PrintNodes(sNode *ptr)
-{
-	while (ptr -> next)
+	else
 	{
-		printf("\"%s\" is located in 0x%x\n", ptr -> str, ptr);
-		ptr = ptr -> next;
+		*newptr = (sNode){str, NULL};
+		*ptr = newptr;
 	}
 }
-void free_mem(sNode *ptr)
+
+void RemoveNode(sNode **ptr, char *str)
 {
-	if (ptr -> next)
+	sNode *node = *ptr;
+	if (!node)
+		return;
+	
+	if (!strcmp(node -> str, str))
 	{
-		printf("Freeing 0x%x (\"%s\")\n", ptr, ptr -> str);
-		free_mem(ptr -> next);
-		free(ptr);
+		if (!(node -> next))
+		{
+			*ptr = NULL;
+			printf("Removed \"%s\" (0x%x)  0\n", node -> str, node);
+			free(node);
+			return;
+		}
+		
+		else
+		{
+			*ptr = node -> next;
+			printf("Removed \"%s\" (0x%x)  1\n", node -> str, node);
+			free(node);
+			return;
+		}
+
+	}
+	sNode *nextptr;	
+	for (sNode *node = *ptr ; node -> next ; node = node -> next)
+	{
+		nextptr = node -> next;
+		if (!strcmp(nextptr -> str, str))
+		{
+			if (node -> next -> next)
+			{
+				node -> next = node -> next -> next;
+				printf("Removed \"%s\" (0x%x)\n", nextptr -> str, nextptr);
+				free(nextptr);
+				return;
+			}
+			else
+			{
+				node -> next = NULL;
+				printf("Removed \"%s\" (0x%x)\n", nextptr -> str, nextptr);
+				free(nextptr);
+				return;
+			}
+		}
+
+	}
+}
+
+void PrintNodes(sNode **ptr)
+{
+	printf("( ");
+	for (sNode *node = *ptr; node ; node = node -> next) printf("\"%s\" -> ", node -> str);
+	printf("NULL )\n");
+	return;
+}
+
+void free_mem(sNode **ptr)
+{
+	sNode tmp;
+	sNode *node = *ptr;
+	while(node)
+	{
+		tmp = *node;
+		printf("Freed \"%s\" (0x%x) \n", node -> str, ptr);
+		free(node);
+		node = tmp.next;
 	}
 }
 
 int main(void)
 {
-	sNode *ptr;
-	sNode first = {"hi", NULL};
-
-
-	ptr = &first;
-
-	ptr = CreateNode(ptr, "x");
-	ptr = CreateNode(ptr, "y");
-	ptr = CreateNode(ptr, "z");
-	PrintNodes(ptr);
-	ptr = CreateNode(ptr, "cool");
-	PrintNodes(ptr);
-	RemoveNode(ptr, "x");
+	sNode *node = NULL;
+	sNode **ptr = &ptr;
+	CreateNode(ptr, "z");
+	CreateNode(ptr, "B");
 	PrintNodes(ptr);
 	RemoveNode(ptr, "z");
+	CreateNode(ptr, "BBB");
 	PrintNodes(ptr);
 	free_mem(ptr);
 
