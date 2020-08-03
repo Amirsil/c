@@ -1,3 +1,4 @@
+#include "sNode.h"
 
 void CreateNode(sNode **ptr, char *str)
 {

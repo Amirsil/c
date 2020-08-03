@@ -1,4 +1,5 @@
 #include "sNode.c"
+
 int main(void)
 {
 	sNode *node = NULL;
