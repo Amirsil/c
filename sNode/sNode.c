@@ -1,12 +1,3 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-/* define sNode type */
-
-typedef struct sNode{
-		char *str;
-		struct sNode *next;
-	}sNode;
 
 void CreateNode(sNode **ptr, char *str)
 {
@@ -69,18 +60,4 @@ void free_mem(sNode **ptr)
 		free(node);
 		node = tmp.next;
 	}
-}
-
-int main(void)
-{
-	sNode *node = NULL;
-	sNode **ptr = &node;
-	CreateNode(ptr, "z");
-	CreateNode(ptr, "B");
-	PrintNodes(ptr);
-	RemoveNode(ptr, "z");
-	CreateNode(ptr, "BBB");
-	PrintNodes(ptr);
-	free_mem(ptr);
-
 }
