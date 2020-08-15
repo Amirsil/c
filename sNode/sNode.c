@@ -2,7 +2,7 @@
 
 void CreateNode(sNode **ptr, char *str)
 {
-	sNode *newptr = (sNode *)malloc(sizeof(sNode *));
+	sNode *newptr = (sNode *)malloc(sizeof(sNode));
 	if (*ptr) *newptr = (sNode){str, *ptr};
 	else *newptr = (sNode){str, NULL};
 	printf("Added \"%s\" (0x%x)\n", newptr -> str, newptr);
