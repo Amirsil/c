@@ -2,6 +2,7 @@
 
 int main(void)
 {
+	
 	sNode *node = NULL;
 	CreateNode(&node, "z");
 	CreateNode(&node, "B");
