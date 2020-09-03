@@ -9,5 +9,5 @@ int main(void)
 	RemoveNode(&node, "z");
 	CreateNode(&node, "BBB");
 	PrintNodes(&node);
-	free_mem(&node);
+	FreeList(&node);
 }

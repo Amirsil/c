@@ -10,4 +10,4 @@ typedef struct sNode{
 void CreateNode();
 void RemoveNode();
 void PrintNodes();
-void free_mem();
+void FreeList();
