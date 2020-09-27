@@ -16,5 +16,5 @@ void PrintNodes(node_t **ptr);
 void CreateNode(node_t **ptr, const char *str, void* (*allocate)(size_t), void (*deallocate)(void *)); 
 /* 
 	allocate and deallocate are exported init functions for allocating and deallocating memory on your own custom heap,
-	you can set it to &malloc and &free if you still want to use glibc's general purpous allocator
+	you can set it to &malloc and &free if you still want to use glibc's general purpose allocator
 */
