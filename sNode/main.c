@@ -2,7 +2,7 @@
 
 int main(void)
 {
-	sNode *node = NULL;
+	node_t *node = NULL;
 	CreateNode(&node, "z", &malloc, &free);
 	CreateNode(&node, "B", &malloc, &free);
 	PrintNodes(&node);

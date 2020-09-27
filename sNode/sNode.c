@@ -1,19 +1,19 @@
 #include "sNode.h"
 
-void CreateNode(sNode **ptr, const char *str, void* (*allocate)(size_t), void (*deallocate)(void *))
+void CreateNode(node_t **ptr, const char *str, void* (*allocate)(size_t), void (*deallocate)(void *))
 {
-	sNode *newptr;
-	if (!( newptr = (sNode *)allocate(sizeof(sNode)))) printf("Failed to allocate memory in the heap :(");
-	if (*ptr) *newptr = (sNode){str, *ptr, deallocate};
-	else *newptr = (sNode){str, NULL, deallocate};
+	node_t *newptr;
+	if (!( newptr = (node_t *)allocate(sizeof(node_t)))) printf("Failed to allocate memory in the heap :(");
+	if (*ptr) *newptr = (node_t){str, *ptr, deallocate};
+	else *newptr = (node_t){str, NULL, deallocate};
 	printf("Added \"%s\" (%p)\n", newptr -> str, newptr);
 	*ptr = newptr;
 }
 
 
-void RemoveNode(sNode **ptr, const char *str)
+void RemoveNode(node_t **ptr, const char *str)
 {
-	sNode *node = *ptr;
+	node_t *node = *ptr;
 	if (!node)
 		return;
 	
@@ -26,8 +26,8 @@ void RemoveNode(sNode **ptr, const char *str)
 		return;
 	}
 
-	sNode *nextptr;	
-	for (sNode *node = *ptr ; node -> next ; node = node -> next)
+	node_t *nextptr;	
+	for (node_t *node = *ptr ; node -> next ; node = node -> next)
 	{
 		nextptr = node -> next;
 		void (*deallocate)(void *) = nextptr -> deallocate;
@@ -46,18 +46,18 @@ void RemoveNode(sNode **ptr, const char *str)
 	printf("\"%s\" is not in the list, therefore it cannot be removed.", str);
 }
 
-void PrintNodes(sNode **ptr)
+void PrintNodes(node_t **ptr)
 {
 	printf("[");
-	for (sNode *node = *ptr; node ; node = node -> next) printf("\"%s\" -> ", node -> str);
+	for (node_t *node = *ptr; node ; node = node -> next) printf("\"%s\" -> ", node -> str);
 	printf("NULL]\n");
 	return;
 }
 
-void FreeList(sNode **ptr)
+void FreeList(node_t **ptr)
 {
-	sNode tmp;
-	sNode *node = *ptr;
+	node_t tmp;
+	node_t *node = *ptr;
 	while(node)
 	{
 		tmp = *node;
