@@ -1,4 +1,5 @@
 #include "var.h"
+
 #define ALLOC_VAL(type, TYPE) {\
         void *valptr; \
         valptr = (ptr->valptr) ? realloc(ptr->valptr, sizeof(val)) : malloc(sizeof(val)); \
@@ -9,7 +10,7 @@
 void free_var(Var *ptr){
 	if (ptr->type == NONE) 
 	{
-		printf("The variable has already been freed");
+		printf("This variable has already been freed");
 		return;
 	}
 	free(ptr->valptr);
@@ -24,7 +25,7 @@ void print_var(Var *ptr){
 		case DOUBLE: printf("%f\n", *(double*)ptr->valptr); break;
 		case CHARACTER: printf("\'%c\'\n", *(char*)ptr->valptr); break;
 		case U_INTEGER: printf("%u\n", *(unsigned int*)ptr->valptr); break;
-		case NONE: printf("The variable doesn't exist anymore\n");
+		case NONE: printf("This variable doesn't exist anymore\n");
 
 	}
 }
@@ -35,3 +36,5 @@ void uint_var(const unsigned int val, Var *ptr) ALLOC_VAL(unsigned int, U_INTEGE
 void char_var(const char val, Var *ptr) ALLOC_VAL(char, CHARACTER);
 void str_var(char *val, Var *ptr) ALLOC_VAL(char*, STRING);
 
+void *(*malloc_fn)(size_t size) = &malloc;
+void (*free_fn)(void *ptr) = &free;

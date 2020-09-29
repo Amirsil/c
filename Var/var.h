@@ -18,3 +18,10 @@ void double_var(const double val, Var* ptr);
 void uint_var(const unsigned int val, Var* ptr);
 void char_var(const char val, Var* ptr);
 void str_var(char *val, Var* ptr);
+
+
+void *(*malloc_fn)(size_t size);
+void (*free_fn)(void *ptr);
+
+/* The allocator is defaulted to glibc's general purpose allocator, 
+to change it to your own custom allocator simply change malloc_fc and free_fn */
