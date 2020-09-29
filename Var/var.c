@@ -1,13 +1,16 @@
 #include "var.h"
+#define ALLOC_VAL(type, TYPE) {\
+        void *valptr; \
+        valptr = (ptr->valptr) ? realloc(ptr->valptr, sizeof(val)) : malloc(sizeof(val)); \
+        *(type*)valptr = val; \
+        *ptr = (Var){TYPE, valptr}; \
+       }
 
-void new_var(enum types type, void* valptr, Var *ptr) {
-	if (ptr->valptr) free_var(ptr);
-	*ptr = (Var){type, valptr};
-}
 void free_var(Var *ptr){
+	if (ptr->type == NONE) printf("This variable is already empty");
 	free(ptr->valptr);
 	ptr->type = NONE;
-	ptr->valptr = 0;
+	ptr->valptr = 0x0;
 }
 
 void print_var(Var *ptr){
@@ -16,41 +19,15 @@ void print_var(Var *ptr){
 		case INTEGER: printf("%d\n", *(int*)ptr->valptr); break;
 		case DOUBLE: printf("%f\n", *(double*)ptr->valptr); break;
 		case CHARACTER: printf("%c\n", *(char*)ptr->valptr); break;
-		case UINTEGER: printf("%u\n", *(unsigned int*)ptr->valptr); break;
+		case U_INTEGER: printf("%u\n", *(unsigned int*)ptr->valptr); break;
 		case NONE: printf("This var doesn't exist anymore\n");
 
 	}
 }
 
-void *intptr(const int val)
-{
-	void *ptr = malloc(sizeof(val));
-	*(int*)ptr = val;
-	return ptr;
-}
-void *doubleptr(const double val)
-{
-	void *ptr = malloc(sizeof(val));
-	*(double*)ptr = val;
-	return ptr;
-}
-void *uintptr(const unsigned int val)
-{
-	void *ptr = malloc(sizeof(val));
-	*(unsigned int*)ptr = val;
-	return ptr;
-}
-void *charptr(const char val)
-{
-	void *ptr = malloc(sizeof(val));
-	*(char*)ptr = val;
-	return ptr;
-
-}
-void *strptr(const char *val)
-{
-	void *ptr = malloc(strlen(val));
-	*(char**)ptr = strdup(val);
-	return ptr;
-}
+void int_var(const int val, Var *ptr) ALLOC_VAL(int, INTEGER);
+void double_var(const double val, Var *ptr) ALLOC_VAL(double, DOUBLE);
+void uint_var(const unsigned int val, Var *ptr) ALLOC_VAL(unsigned int, U_INTEGER);
+void char_var(const char val, Var *ptr) ALLOC_VAL(char, CHARACTER);
+void str_var(char *val, Var *ptr) ALLOC_VAL(char*, STRING);
 

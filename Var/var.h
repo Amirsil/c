@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdbool.h>
 
-enum types{STRING, INTEGER, DOUBLE, CHARACTER, UINTEGER, NONE};
+enum types{STRING, INTEGER, DOUBLE, CHARACTER, U_INTEGER, NONE};
 
 typedef struct Var{
 	enum types type;
@@ -11,11 +11,10 @@ typedef struct Var{
 } Var;
 
 void print_var(Var *ptr);
-void new_var(enum types type, void *valptr, Var *ptr);
 void free_var(Var *ptr);
 
-void *intptr(const int val);
-void *doubleptr(const double val);
-void *uintptr(const unsigned int val);
-void *charptr(const char val);
-void *strptr(const char *val);
+void int_var(const int val, Var* ptr);
+void double_var(const double val, Var* ptr);
+void uint_var(const unsigned int val, Var* ptr);
+void char_var(const char val, Var* ptr);
+void str_var(char *val, Var* ptr);
