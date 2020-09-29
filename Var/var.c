@@ -7,7 +7,11 @@
        }
 
 void free_var(Var *ptr){
-	if (ptr->type == NONE) printf("This variable is already empty");
+	if (ptr->type == NONE) 
+	{
+		printf("The variable has already been freed");
+		return;
+	}
 	free(ptr->valptr);
 	ptr->type = NONE;
 	ptr->valptr = 0x0;
@@ -15,12 +19,12 @@ void free_var(Var *ptr){
 
 void print_var(Var *ptr){
 	switch (ptr->type){
-		case STRING: printf("%s\n", *(char**)ptr->valptr); break;
+		case STRING: printf("\"%s\"\n", *(char**)ptr->valptr); break;
 		case INTEGER: printf("%d\n", *(int*)ptr->valptr); break;
 		case DOUBLE: printf("%f\n", *(double*)ptr->valptr); break;
-		case CHARACTER: printf("%c\n", *(char*)ptr->valptr); break;
+		case CHARACTER: printf("\'%c\'\n", *(char*)ptr->valptr); break;
 		case U_INTEGER: printf("%u\n", *(unsigned int*)ptr->valptr); break;
-		case NONE: printf("This var doesn't exist anymore\n");
+		case NONE: printf("The variable doesn't exist anymore\n");
 
 	}
 }
