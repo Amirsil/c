@@ -1,7 +1,7 @@
-#include "sNode.c"
+#include "sNode.h"
 
 int main(void)
-{
+{	
 	node_t *node = NULL;
 	CreateNode(&node, "z");
 	CreateNode(&node, "B");
