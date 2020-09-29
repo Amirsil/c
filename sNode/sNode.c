@@ -1,11 +1,20 @@
 #include "sNode.h"
 
-void CreateNode(node_t **ptr, const char *str, void* (*allocate)(size_t), void (*deallocate)(void *))
+
+/*
+The allocator is defaulted to glibc's general purpose allocator, to change it to your own custom allocator simply change malloc_fc and free_fn
+*/
+
+void *(*malloc_fn)(size_t size) = &malloc;
+void (*free_fn)(void *ptr) = &free;
+
+
+void CreateNode(node_t **ptr, const char *str)
 {
 	node_t *newptr;
-	if (!( newptr = (node_t *)allocate(sizeof(node_t)))) printf("Failed to allocate memory in the heap :(");
-	if (*ptr) *newptr = (node_t){str, *ptr, deallocate};
-	else *newptr = (node_t){str, NULL, deallocate};
+	if (!( newptr = (node_t *)malloc_fn(sizeof(node_t)))) printf("Failed to malloc_fn memory in the heap :(");
+	if (*ptr) *newptr = (node_t){str, *ptr};
+	else *newptr = (node_t){str, NULL};
 	printf("Added \"%s\" (%p)\n", newptr -> str, newptr);
 	*ptr = newptr;
 }
@@ -30,7 +39,6 @@ void RemoveNode(node_t **ptr, const char *str)
 	for (node_t *node = *ptr ; node -> next ; node = node -> next)
 	{
 		nextptr = node -> next;
-		void (*deallocate)(void *) = nextptr -> deallocate;
 		if (!strcmp(nextptr -> str, str))
 		{
 			if (node -> next -> next)
@@ -38,7 +46,7 @@ void RemoveNode(node_t **ptr, const char *str)
 			else
 				node -> next = NULL;
 			printf("Removed \"%s\" (%p)\n", nextptr -> str, nextptr);
-			deallocate(nextptr);
+			free_fn(nextptr);
 			return;
 		}
 
@@ -61,9 +69,9 @@ void FreeList(node_t **ptr)
 	while(node)
 	{
 		tmp = *node;
-		void (*deallocate)(void *) = node -> deallocate; 
 		printf("Freed \"%s\" (%p) \n", node -> str, ptr);
-		deallocate(node);
+		free_fn(node);
 		node = tmp.next;
 	}
 }
+
