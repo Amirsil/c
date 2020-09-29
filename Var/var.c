@@ -30,11 +30,25 @@ void print_var(Var *ptr){
 	}
 }
 
-void int_var(const int val, Var *ptr) ALLOC_VAL(int, INTEGER);
-void double_var(const double val, Var *ptr) ALLOC_VAL(double, DOUBLE);
-void uint_var(const unsigned int val, Var *ptr) ALLOC_VAL(unsigned int, U_INTEGER);
-void char_var(const char val, Var *ptr) ALLOC_VAL(char, CHARACTER);
-void str_var(char *val, Var *ptr) ALLOC_VAL(char*, STRING);
+void int_var(const int val, Var *ptr) 
+	ALLOC_VAL(int, INTEGER)
+
+void double_var(const double val, Var *ptr) 
+	ALLOC_VAL(double, DOUBLE)
+
+void uint_var(const unsigned int val, Var *ptr) 
+	ALLOC_VAL(unsigned int, U_INTEGER)
+
+void char_var(const char val, Var *ptr) 
+	ALLOC_VAL(char, CHARACTER)
+	
+void str_var(char *val, Var *ptr)
+{
+	void *valptr;
+    valptr = (ptr->valptr) ? realloc(ptr->valptr, strlen(val)) : malloc(strlen(val));
+    *(char**)valptr = strdup(val);
+    *ptr = (Var){STRING, valptr}; 
+}
 
 void *(*malloc_fn)(size_t size) = &malloc;
 void (*free_fn)(void *ptr) = &free;
