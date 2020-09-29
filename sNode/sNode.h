@@ -16,7 +16,6 @@ void CreateNode(node_t **ptr, const char *str);
 
 void *(*malloc_fn)(size_t size);
 void (*free_fn)(void *ptr);
-/* 
-	allocate and deallocate are exported init functions for allocating and deallocating memory on your own custom heap,
-	you can set it to &malloc and &free if you still want to use glibc's general purpose allocator
-*/
+/*
+The allocator is defaulted to glibc's general purpose allocator, to change it to your own custom allocator simply change malloc_fc and free_fn
+/*
