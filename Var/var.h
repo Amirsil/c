@@ -1,7 +1,6 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
-#include <stdbool.h>
+#include <stdlib.h>
 
 enum types{STRING, INTEGER, DOUBLE, CHARACTER, U_INTEGER, NONE};
 
@@ -18,7 +17,6 @@ void double_var(const double val, Var* ptr);
 void uint_var(const unsigned int val, Var* ptr);
 void char_var(const char val, Var* ptr);
 void str_var(char *val, Var* ptr);
-
 
 void *(*malloc_fn)(size_t size);
 void (*free_fn)(void *ptr);

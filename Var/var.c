@@ -1,10 +1,12 @@
 #include "var.h"
 
-#define ALLOC_VAL(type, TYPE) {\
+#define PRINT_VAR(type, var_type, format) case var_type: printf(""#format"\n", *(type*)ptr->valptr); break
+
+#define ALLOC_VAL(type, var_type) {\
         void *valptr; \
         valptr = (ptr->valptr) ? realloc(ptr->valptr, sizeof(val)) : malloc(sizeof(val)); \
         *(type*)valptr = val; \
-        *ptr = (Var){TYPE, valptr}; \
+        *ptr = (Var){var_type, valptr}; \
        }
 
 void free_var(Var *ptr){
@@ -20,12 +22,12 @@ void free_var(Var *ptr){
 
 void print_var(Var *ptr){
 	switch (ptr->type){
-		case STRING: printf("\"%s\"\n", *(char**)ptr->valptr); break;
-		case INTEGER: printf("%d\n", *(int*)ptr->valptr); break;
-		case DOUBLE: printf("%f\n", *(double*)ptr->valptr); break;
-		case CHARACTER: printf("\'%c\'\n", *(char*)ptr->valptr); break;
-		case U_INTEGER: printf("%u\n", *(unsigned int*)ptr->valptr); break;
-		case NONE: printf("This variable doesn't exist anymore\n");
+		PRINT_VAR(char*, STRING, "%s");
+		PRINT_VAR(int, INTEGER, %d);
+		PRINT_VAR(double, DOUBLE, %f);
+		PRINT_VAR(char, CHARACTER, '%c');
+		PRINT_VAR(unsigned int, U_INTEGER, %u);
+		default: printf("This variable doesn't exist anymore\n");
 
 	}
 }
