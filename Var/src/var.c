@@ -13,7 +13,7 @@
 #define ALLOC_VAL(var_type, enum_type, size)\
     void *valptr; \
     if (ptr->valptr){ /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
-    	if (ptr->type == enum_type && ptr->type != STRING) valptr = ptr->valptr;\
+    	if (ptr->type == enum_type && ptr->type != STRING) valptr = ptr->valptr; \
 		else switch (ptr->type){ \
  			case INTEGER: OPTIMIZED_REALLOC(int, sizeof(int), size); break; \
  			case DOUBLE: OPTIMIZED_REALLOC(double, sizeof(double), size); break; \
