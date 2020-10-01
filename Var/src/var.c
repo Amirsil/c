@@ -11,25 +11,25 @@
 	else valptr = ptr->valptr;
 
 #define ALLOC_VAL(var_type, enum_type, size)\
-    void *valptr; \
-    if (ptr->valptr){ /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
-    	if (ptr->type == enum_type && ptr->type != STRING) \
-    		valptr = ptr->valptr; \
+	void *valptr; \
+	if (ptr->valptr){ /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
+		if (ptr->type == enum_type && ptr->type != STRING) \
+			valptr = ptr->valptr; \
 		else switch (ptr->type){ \
- 			case INTEGER: OPTIMIZED_REALLOC(int, sizeof(int), size); break; \
- 			case DOUBLE: OPTIMIZED_REALLOC(double, sizeof(double), size); break; \
- 			case CHARACTER: OPTIMIZED_REALLOC(char, sizeof(char), size); break; \
- 			case U_INTEGER: OPTIMIZED_REALLOC(unsigned int, sizeof(unsigned int), size); break; \
- 			case STRING: OPTIMIZED_REALLOC(char*, strlen(*(char**)ptr->valptr)*sizeof(char), size); break; \
- 			case NONE: {}  /* the var type cannot be NONE, because valptr is not NULL */ \
+			case INTEGER: OPTIMIZED_REALLOC(int, sizeof(int), size); break; \
+			case DOUBLE: OPTIMIZED_REALLOC(double, sizeof(double), size); break; \
+			case CHARACTER: OPTIMIZED_REALLOC(char, sizeof(char), size); break; \
+			case U_INTEGER: OPTIMIZED_REALLOC(unsigned int, sizeof(unsigned int), size); break; \
+			case STRING: OPTIMIZED_REALLOC(char*, strlen(*(char**)ptr->valptr)*sizeof(char), size); break; \
+			case NONE: {}  /* the var type cannot be NONE, because valptr is not NULL */ \
 		} \
 	} \
 	else if (!(valptr = malloc_fn(size))) { \
 		printf("Failed to allocate memory, cancelling"); \
 		return; \
 	} \
-    *(var_type*)valptr = val; \
-    *ptr = (Var){enum_type, valptr}; \
+	*(var_type*)valptr = val; \
+	*ptr = (Var){enum_type, valptr}; \
 
 
 void *(*malloc_fn)(size_t size) = &malloc;
