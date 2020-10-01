@@ -22,9 +22,8 @@
 #define ALLOC_VAL(var_type, enum_type, size)\
 	void *valptr; \
 	if (ptr->valptr){ /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
-		if (ptr->type == enum_type && ptr->type != STRING) \
-			valptr = ptr->valptr; \
-		else switch (ptr->type){ \
+		if (ptr->type == STRING) free_fn(*(char **)ptr->valptr); \
+		switch (ptr->type){ \
 			case INTEGER: OPTIMIZED_REALLOC(int, sizeof(int), size); break; \
 			case DOUBLE: OPTIMIZED_REALLOC(double, sizeof(double), size); break; \
 			case CHARACTER: OPTIMIZED_REALLOC(char, sizeof(char), size); break; \
@@ -57,6 +56,7 @@ void char_var(char val, Var *ptr) {
 	ALLOC_VAL(char, CHARACTER, sizeof(val))
 }
 void str_var(char *val, Var *ptr) {
+	val = strdup(val);
 	ALLOC_VAL(char*, STRING, strlen(val)*sizeof(char))
 }
 
@@ -65,6 +65,7 @@ void free_var(Var *ptr){
 		printf("This variable has already been freed\n");
 		return;
 	}
+	if (ptr->type == STRING) free_fn(*(char **)ptr->valptr);
 	free_fn(ptr->valptr);
 	ptr->type = NONE;
 	ptr->valptr = NULL;
