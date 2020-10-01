@@ -37,7 +37,6 @@ void char_var(char val, Var *ptr) {
 	ALLOC_VAL(char, CHARACTER, sizeof(val))
 }
 void str_var(char *val, Var *ptr) {
-	val = strdup(val);
 	ALLOC_VAL(char*, STRING, strlen(val)*sizeof(char))
 }
 
