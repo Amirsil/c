@@ -1,7 +1,14 @@
 #include "var.h"
 #define PRINT_VAR(var_type, format) printf(""#format" (%p)\n", *(var_type*)ptr->valptr, ptr->valptr)
 
-#define OPTIMIZED_REALLOC(var_type, old_size, size) valptr = (size > old_size) ? realloc(ptr->valptr, size) : ptr->valptr
+#define OPTIMIZED_REALLOC(var_type, old_size, size) \
+	if (size > old_size) { \
+		if (!(valptr = realloc(ptr->valptr, size))) { \
+			printf("Failed to reallocate memory, cancellinng\n"); \
+			return; \
+		} \
+	} \
+	else valptr = ptr->valptr;
 
 #define ALLOC_VAL(var_type, enum_type, size)\
     void *valptr; \
@@ -16,7 +23,10 @@
  			case NONE: {}  /* the var type cannot be NONE, because valptr is not NULL */ \
 		} \
 	} \
-	else valptr = malloc_fn(size); \
+	else if (!(valptr = malloc_fn(size))) { \
+		printf("Failed to allocate memory, cancelling"); \
+		return; \
+	} \
     *(var_type*)valptr = val; \
     *ptr = (Var){enum_type, valptr}; \
 
@@ -42,7 +52,7 @@ void str_var(char *val, Var *ptr) {
 
 void free_var(Var *ptr){
 	if (ptr->type == NONE) {
-		printf("This variable has already been freed");
+		printf("This variable has already been freed\n");
 		return;
 	}
 	free_fn(ptr->valptr);
