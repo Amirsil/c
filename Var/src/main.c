@@ -2,6 +2,7 @@
 
 int main(){
 	Var dynamic = {};
+	
 	str_var("foo", &dynamic);
 	print_var(&dynamic);
 

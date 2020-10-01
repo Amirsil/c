@@ -1,18 +1,14 @@
 CC = gcc
 CFLAGS = -Wall -Werror -g
-BIN = var
+BIN = main
 OBJS = *.o
 	   
-all: mainapp
-
-
-mainapp: $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) -o $(BIN)
-	rm *.o
+all: $(OBJS)
+	@$(CC) $(CFLAGS) $(OBJS) -o $(BIN)
+	@rm *.o
 
 %.o: src/%.c
-	$(CC) $(CFLAGS) -c 	$^
+	@$(CC) $(CFLAGS) -c $^
 	
 clean:
-	touch foo.o
-	rm $(BIN) *.o
+	-@rm $(BIN) *.o $(BIN).exe 2>/dev/null || true
