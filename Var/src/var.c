@@ -3,12 +3,21 @@
 
 #define OPTIMIZED_REALLOC(var_type, old_size, size) \
 	if (size > old_size) { \
+		/* When scaling up free/malloc is faster */ \
+		free(ptr->valptr); \
+		if (!(valptr = malloc_fn(size))) { \
+			printf("Failed to allocate memory, cancelling"); \
+			return; \
+		} \
+	} \
+	else if (old_size > size){ \
+		/* When scaling down realloc is faster */ \
 		if (!(valptr = realloc(ptr->valptr, size))) { \
 			printf("Failed to reallocate memory, cancellinng\n"); \
 			return; \
 		} \
 	} \
-	else valptr = ptr->valptr;
+	else valptr = ptr->valptr; \
 
 #define ALLOC_VAL(var_type, enum_type, size)\
 	void *valptr; \

@@ -15,6 +15,6 @@ int main(){
 
 	char_var(0x41, &dynamic);
 	print_var(&dynamic);
-
+	
 	return 0;
 }
