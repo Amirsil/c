@@ -10,13 +10,13 @@ typedef struct Var{
 } Var;
 
 void print_var(Var *ptr);
-void free_var(Var **ptr);
+void free_var(Var *ptr);
 
-void int_var(int val, Var** ptr);
-void double_var(double val, Var** ptr);
-void uint_var(unsigned int val, Var** ptr);
-void char_var(char val, Var** ptr);
-void str_var(char *val, Var** ptr);
+void int_var(int val, Var* ptr);
+void double_var(double val, Var* ptr);
+void uint_var(unsigned int val, Var* ptr);
+void char_var(char val, Var* ptr);
+void str_var(char *val, Var* ptr);
 
 void *(*malloc_fn)(size_t size);
 void (*free_fn)(void *ptr);
