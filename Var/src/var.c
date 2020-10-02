@@ -4,7 +4,7 @@
 #define OPTIMIZED_REALLOC(var_type, old_size, size) \
 	if (size > old_size) { \
 		/* When scaling up free/malloc is faster */ \
-		free(ptr->valptr); \
+		free_fn(ptr->valptr); \
 		if (!(valptr = malloc_fn(size))) { \
 			printf("Failed to allocate memory, cancelling"); \
 			return; \
