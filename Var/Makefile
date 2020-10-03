@@ -2,13 +2,13 @@ CC = gcc
 CFLAGS = -Wall -Werror -g
 BIN = main
 OBJS = *.o
-	   
+   
 all: $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(BIN)
-	@rm *.o
+	@rm -f $(OBJS)
 
 %.o: src/%.c
 	@$(CC) $(CFLAGS) -c $^
 	
 clean:
-	-@rm $(BIN) *.o $(BIN).exe 2>/dev/null || true
+	@rm -f $(BIN) $(BIN).exe $(OBJS)

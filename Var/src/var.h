@@ -2,21 +2,28 @@
 #include <string.h>
 #include <stdlib.h>
 
-enum types{STRING, INTEGER, DOUBLE, CHARACTER, U_INTEGER, NONE};
+typedef enum types {
+	NONE = 0,
+	STRING, 
+	INTEGER, 
+	DOUBLE, 
+	CHARACTER, 
+	U_INTEGER
+} types_t;
 
-typedef struct Var{
-	enum types type;
+typedef struct var_t {
+	types_t type;
 	void *valptr;
-} Var;
+} var_t;
 
-void print_var(Var *ptr);
-void free_var(Var *ptr);
+void print_var(var_t *ptr);
+void free_var(var_t *ptr);
 
-void int_var(int val, Var* ptr);
-void double_var(double val, Var* ptr);
-void uint_var(unsigned int val, Var* ptr);
-void char_var(char val, Var* ptr);
-void str_var(char *val, Var* ptr);
+void int_var(int val, var_t* ptr);
+void double_var(double val, var_t* ptr);
+void uint_var(unsigned int val, var_t* ptr);
+void char_var(char val, var_t* ptr);
+void str_var(char *val, var_t* ptr);
 
 void *(*malloc_fn)(size_t size);
 void (*free_fn)(void *ptr);
