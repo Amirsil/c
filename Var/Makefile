@@ -1,14 +1,13 @@
 CC = gcc
-CFLAGS = -Wall -Werror -g
-BIN = main
-OBJS = *.o
+CFLAGS = -Wall -Werror -g -I include
+BIN = bin/main
+OBJS = build/main.o build/var.o
    
 all: $(OBJS)
 	@$(CC) $(CFLAGS) $(OBJS) -o $(BIN)
-	@rm -f $(OBJS)
 
-%.o: src/%.c
-	@$(CC) $(CFLAGS) -c $^
+build/%.o: src/%.c
+	@$(CC) $(CFLAGS) -c $^ -o $@
 	
 clean:
-	@rm -f $(BIN) $(BIN).exe $(OBJS)
+	@rm -f $(BIN) *.o $(BIN).exe build/*

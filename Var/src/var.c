@@ -2,41 +2,24 @@
 
 #define PRINT_VAR(var_type, format) printf(""#format" (%p)\n", *(var_type*)ptr->valptr, ptr->valptr)
 
-#define OPTIMIZED_REALLOC(var_type, old_size, size) \
-	do { \
-		if (size > old_size) { \
-			/* When scaling up free/malloc is faster */ \
-			free_fn(ptr->valptr); \
-			if (!(valptr = malloc_fn(size))) { \
-				fputs("Failed to allocate memory, cancelling\n", stderr); \
-				return; \
-			} \
-		} \
-		else if (old_size > size){ \
-			/* When scaling down realloc is faster */ \
-			if (!(valptr = realloc(ptr->valptr, size))) { \
-				fputs("Failed to reallocate memory, cancelling\n", stderr); \
-				return; \
-			} \
-		} \
-		else valptr = ptr->valptr; \
-	} while (0)
-
-#define ALLOC_VAL(var_type, enum_type, size)\
+#define ALLOC_VAL(var_type, enum_type, new_size)\
 	do { \
 		void *valptr; \
-		if (ptr->valptr){ /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
-			if (STRING == ptr->type ) free_fn(*(char **)ptr->valptr); \
-			switch (ptr->type){ \
-				case INTEGER: OPTIMIZED_REALLOC(int, sizeof(int), size); break; \
-				case DOUBLE: OPTIMIZED_REALLOC(double, sizeof(double), size); break; \
-				case CHARACTER: OPTIMIZED_REALLOC(char, sizeof(char), size); break; \
-				case U_INTEGER: OPTIMIZED_REALLOC(unsigned int, sizeof(unsigned int), size); break; \
-				case STRING: OPTIMIZED_REALLOC(char*, strlen(*(char**)ptr->valptr)*sizeof(char), size); break; \
-				case NONE: {}  /* the var type cannot be NONE, because valptr is not NULL */ \
+		const size_t old_size = (STRING == ptr->type) ? strlen(*(char**)ptr->valptr) : sizeof(*(var_type*)ptr->valptr); \
+		if (ptr->valptr) { /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
+			if (STRING == ptr->type) \
+				free_fn(*(char **)ptr->valptr); /* Freeing the string allocated by strdup before replacing value*/ \
+			if (new_size == old_size) \
+				valptr = ptr->valptr; \
+			else { \
+				free_fn(ptr->valptr); \
+				if (!(valptr = malloc_fn(new_size))) { \
+					fputs("Failed to allocate memory, cancelling\n", stderr); \
+					return; \
+				} \
 			} \
 		} \
-		else if (!(valptr = malloc_fn(size))) { \
+		else if (!(valptr = malloc_fn(new_size))) { \
 			fputs("Failed to allocate memory, cancelling\n", stderr); \
 			return; \
 		} \
@@ -71,7 +54,9 @@ void free_var(var_t *ptr) {
 		fputs("This variable has already been freed\n", stderr);
 		return;
 	}
-	if (STRING == ptr->type) free_fn(*(char **)ptr->valptr);
+	if (STRING == ptr->type) {
+		free_fn(*(char **)ptr->valptr);
+	}
 	free_fn(ptr->valptr);
 	ptr->type = NONE;
 	ptr->valptr = NULL;
