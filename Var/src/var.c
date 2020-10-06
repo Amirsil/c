@@ -9,8 +9,10 @@
 		if (ptr->valptr) { /* valptr is not NULL, therefore a var already exist and holds some kind of value and type */ \
 			if (STRING == ptr->type) \
 				free_fn(*(char **)ptr->valptr); /* Freeing the string allocated by strdup before replacing value*/ \
+				\
 			if (new_size == old_size) \
 				valptr = ptr->valptr; \
+				\
 			else { \
 				free_fn(ptr->valptr); \
 				if (!(valptr = malloc_fn(new_size))) { \
