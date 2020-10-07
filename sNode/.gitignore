@@ -1,3 +1,2 @@
-main
-main.exe
-*.o
+build
+bin
