@@ -1,2 +1,1 @@
-# c.
-C projects
+POC projects written in C
